@@ -75,6 +75,9 @@ function dataLoaded(data) {
 		sorting: true,
 		selecting: true,
 		rowClick: function(args) {
+			map.setCenter({lat:args.item.lat, lng:args.item.lng});
+			map.setZoom(10);
+
 			if (args.item.Region === "Opotiki District") {
 				$("#opotikiImg").show();
 			} else {
