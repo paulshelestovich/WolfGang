@@ -215,7 +215,20 @@ body {
 }
 
 .panel-body3 {
-    height: 150px;
+    height: 180px;
+}
+
+.panel-body4 {
+    height: 530px;
+
+}
+
+#opotikiImg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -50px; /*half the image width*/
+    margin-top: -50px; /*half the image height*/
 }
 
 .login-panel {

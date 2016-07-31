@@ -56,27 +56,49 @@ $('body').on('click', '.btn-group button', function () {
 var heatmapArray, currentColumn;
 
 function dataLoaded(data) {
-	heatmapArray = CSVToArray(data).map(function(item) {
+	var csvData = CSVToArray(data);
+	var headers = csvData.shift();
+	heatmapArray = csvData.map(function(item) {
 		return {lat: item[8], lng: item[9], value: item[currentColumn] * 10};
 	});
-	heatmapArray.shift();
 
+	var tableData = csvData.map(function(item) {
+		var tableItem = {};
+		headers.forEach(function(header, index) {
+			tableItem[header] = item[index];
+		});
+		return tableItem;
+	});
 	$("#jsGrid").jsGrid({
 		width: "100%",
-		height: "400px",
-		inserting: false,
+		height: "100%",
 		sorting: true,
+		selecting: true,
+		rowClick: function(args) {
+			if (args.item.Region === "Opotiki District") {
+				$("#opotikiImg").show();
+			} else {
+				$("#opotikiImg").hide();
+			}
+		},
 		paging: false,
-		data: clients,
+		data: tableData,
 		fields: [
-			{ name: "Name", type: "text", width: 150, validate: "required" },
-			{ name: "Age", type: "number", width: 50 },
-			{ name: "Address", type: "text", width: 200 },
-			{ name: "Country", type: "select", items: countries, valueField: "Id", textField: "Name" },
-			{ name: "Married", type: "checkbox", title: "Is Married", sorting: false }
+			{ title: "Region", name: "Region", type: "text", width: 70, validate: "required" },
+			{ title: "Registered", name: "Registered", type: "number", width: 30 },
+			{ title: "Total ACC", name: "ACC", type: "number", width: 30},
+			{ title: "ACC / Registered", name: "Ratio of ACC/Registered", type: "number", width: 30, itemTemplate: percentRenderer },
+			{ title: "Total Menacing", name: "1006_classified as menacing", type: "number", width: 30 },
+			{ title: "Menacing / Registered", name: "menacing dogs/registered dogs", type: "number", width: 30, itemTemplate: percentRenderer },
+			{ title: "Menacing / Total Menacing", name: "menacing/total menacing", type: "number", width: 30, itemTemplate: percentRenderer },
+			{ title: "ACC / Total ACC", name: "acc/total acc", type: "number", width: 30, itemTemplate: percentRenderer }
 		]
 	});
 	heatmapProvider.addData(heatmapArray);
+}
+
+function percentRenderer(value) {
+	return value + " %";
 }
 
 function selectYear(year, column) {
@@ -84,10 +106,12 @@ function selectYear(year, column) {
 		$('#button2015_1').addClass('disabled');
 		$('#button2015_2').addClass('disabled');
 		$('#button2015_3').addClass('disabled');
+		$('#button2015_4').addClass('disabled');
 	} else {
 		$('#button2015_1').removeClass('disabled');
 		$('#button2015_2').removeClass('disabled');
 		$('#button2015_3').removeClass('disabled');
+		$('#button2015_4').removeClass('disabled');
 	}
 	$('#button' + year).addClass('active').siblings().removeClass('active');
 	if (heatmapArray && heatmapArray.length) {
@@ -102,21 +126,6 @@ function selectYear(year, column) {
 	});
 }
 
+$("#opotikiImg").hide();
+
 selectYear(2015, 3);
-
-
-var clients = [
-	{ "Name": "Otto Clay", "Age": 25, "Country": 1, "Address": "Ap #897-1459 Quam Avenue", "Married": false },
-	{ "Name": "Connor Johnston", "Age": 45, "Country": 2, "Address": "Ap #370-4647 Dis Av.", "Married": true },
-	{ "Name": "Lacey Hess", "Age": 29, "Country": 3, "Address": "Ap #365-8835 Integer St.", "Married": false },
-	{ "Name": "Timothy Henson", "Age": 56, "Country": 1, "Address": "911-5143 Luctus Ave", "Married": true },
-	{ "Name": "Ramona Benton", "Age": 32, "Country": 3, "Address": "Ap #614-689 Vehicula Street", "Married": false }
-];
-
-var countries = [
-	{ Name: "", Id: 0 },
-	{ Name: "United States", Id: 1 },
-	{ Name: "Canada", Id: 2 },
-	{ Name: "United Kingdom", Id: 3 }
-];
-
