@@ -4,4 +4,3 @@ applications:
   memory: 128M
   instances: 1
   host: wolfgang
-  domain: mybluemix.net
