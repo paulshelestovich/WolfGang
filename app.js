@@ -60,6 +60,22 @@ function dataLoaded(data) {
 		return {lat: item[8], lng: item[9], value: item[currentColumn] * 10};
 	});
 	heatmapArray.shift();
+
+	$("#jsGrid").jsGrid({
+		width: "100%",
+		height: "400px",
+		inserting: false,
+		sorting: true,
+		paging: false,
+		data: clients,
+		fields: [
+			{ name: "Name", type: "text", width: 150, validate: "required" },
+			{ name: "Age", type: "number", width: 50 },
+			{ name: "Address", type: "text", width: 200 },
+			{ name: "Country", type: "select", items: countries, valueField: "Id", textField: "Name" },
+			{ name: "Married", type: "checkbox", title: "Is Married", sorting: false }
+		]
+	});
 	heatmapProvider.addData(heatmapArray);
 }
 
@@ -104,18 +120,3 @@ var countries = [
 	{ Name: "United Kingdom", Id: 3 }
 ];
 
-$("#jsGrid").jsGrid({
-	width: "100%",
-	height: "400px",
-	inserting: false,
-	sorting: true,
-	paging: false,
-	data: clients,
-	fields: [
-		{ name: "Name", type: "text", width: 150, validate: "required" },
-		{ name: "Age", type: "number", width: 50 },
-		{ name: "Address", type: "text", width: 200 },
-		{ name: "Country", type: "select", items: countries, valueField: "Id", textField: "Name" },
-		{ name: "Married", type: "checkbox", title: "Is Married", sorting: false }
-	]
-});
