@@ -4,4 +4,3 @@ applications:
   memory: 128M
   instances: 1
   host: wolfgang
-  buildpack: https://github.com/dmikusa-pivotal/cf-php-apache-buildpack.git
